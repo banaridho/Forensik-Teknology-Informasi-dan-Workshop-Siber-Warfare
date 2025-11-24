@@ -1,43 +1,43 @@
 # 🛡️ Laporan Hasil Scan Nmap - Metasploitable 2
 
-Laporan ini menyajikan hasil pemindaian jaringan pada target **192.168.100.10** menggunakan tool Nmap, berdasarkan output terminal yang dianalisis. Target teridentifikasi sebagai mesin pengujian kerentanan (vulnerable machine), kemungkinan besar adalah **Metasploitable 2**.
+## 🎯 Ringkasan Scan
 
-## ⚙️ Detail Perintah Scan
+Laporan ini menyajikan hasil pemindaian jaringan pada target **192.168.100.10** menggunakan tool Nmap. Target teridentifikasi sebagai mesin pengujian kerentanan (vulnerable machine), yaitu **Metasploitable 2**.
 
-| Parameter | Nilai |
+| Parameter | Detail |
 | :--- | :--- |
-| **Host Name/Target IP** | `192.168.100.10` |
-| **Perintah Nmap** | `nmap -A 192.168.100.10` (atau `-n -Pn -sV -T4 -O --script vuln`) |
+| **Target IP** | `192.168.100.10` |
+| **Perintah Nmap** | `nmap -A 192.168.100.10` (Scan Komprehensif) |
 | **Status Host** | Up (Hidup) |
-| **Waktu Scan** | Sekitar 211.55 detik |
 | **OS Ditemukan** | Linux Kernel 2.6.9 - 2.6.33 |
+| **Waktu Scan** | Sekitar 211.55 detik |
 
 ---
 
-## 💻 Port dan Layanan Terbuka
+## 💻 Tabel Port Terbuka dan Layanan
 
-Tabel berikut merangkum port-port TCP utama yang ditemukan dalam keadaan **`open`** (terbuka), lengkap dengan layanan, versi, dan detail penting terkait kerentanan.
+Tabel ini merangkum port-port TCP utama yang ditemukan dalam keadaan **`open`** (terbuka) beserta versi layanan dan catatan mengenai potensi kerentanan.
 
-| Port | Protokol | Status | Layanan | Versi | Kerentanan Kritis / Catatan |
+| Port | Status | Layanan | Versi | Kerentanan Kritis / Catatan |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **21** | tcp | open | **ftp** | **vsftpd 2.3.4** | **CRITICAL:** Mengizinkan **Anonymous FTP Login**. Versi ini dikenal memiliki *backdoor command execution*. |
-| **22** | tcp | open | **ssh** | **OpenSSH 4.3p2** | Versi lama (Debian r10), potensi kerentanan, Protokol 2.0. |
-| **23** | tcp | open | **telnet** | **Linux telnetd** | Komunikasi tidak terenkripsi. |
-| **80** | tcp | open | **http** | **Apache httpd 2.2.8** | Halaman utama: "Metasploitable2". Versi Apache lama. |
-| **139** | tcp | open | **netbios-ssn** | **Samba smbd 3.x-4.x** | NetBIOS Name: `METASPLOITABLE`. Workgroup: `WORKGROUP`. |
-| **445** | tcp | open | **netbios-ssn** | **Samba smbd 3.x-4.x** | |
-| **1524** | tcp | open | **bindshell** | **Metasploitable root shell** | **CRITICAL:** Ditemukan akses *root shell* yang terbuka, biasanya menandakan *backdoor* yang siap dieksploitasi. |
-| **3306** | tcp | open | **mysql** | **MySQL 5.0.51a** | Versi MySQL lama, rentan terhadap penggunaan *default* atau kredensial lemah. |
-| **5432** | tcp | open | **postgresql** | **PostgreSQL DB 8.3.0** | Versi PostgreSQL lama. |
-| **5900** | tcp | open | **vnc** | **VNC protocol 3.3** | Membutuhkan VNC Authentication (gagal saat *scan*), rentan terhadap *brute force*. |
-| **8180** | tcp | open | **http** | **Apache Tomcat/Coyote** | Apache Tomcat/Coyote JSP engine 1.1. |
+| **21** | open | **ftp** | **vsftpd 2.3.4** | **CRITICAL:** Mengizinkan **Anonymous FTP Login**. Versi ini dikenal memiliki *backdoor command execution* (CVE-2011-2523). |
+| **22** | open | **ssh** | **OpenSSH 4.3p2** | Versi lama (Debian r10), Protokol 2.0. Rentan terhadap serangan *brute force* dan *vulnerability* lama. |
+| **23** | open | **telnet** | **Linux telnetd** | Komunikasi tidak terenkripsi (plain text). |
+| **80** | open | **http** | **Apache httpd 2.2.8** | Halaman utama: "Metasploitable2". Versi Apache lama. |
+| **139** | open | **netbios-ssn** | **Samba smbd 3.x-4.x** | NetBIOS Name: `METASPLOITABLE`. |
+| **445** | open | **netbios-ssn** | **Samba smbd 3.x-4.x** | |
+| **1524** | open | **bindshell** | **Metasploitable root shell** | **CRITICAL:** Ditemukan akses **root shell** yang terbuka, yang memungkinkan eksekusi perintah sebagai *root* secara langsung. |
+| **3306** | open | **mysql** | **MySQL 5.0.51a** | Versi MySQL lama. |
+| **5432** | open | **postgresql** | **PostgreSQL DB 8.3.0** | Versi PostgreSQL lama. |
+| **5900** | open | **vnc** | **VNC protocol 3.3** | Membutuhkan VNC Authentication. |
+| **8180** | open | **http** | **Apache Tomcat/Coyote** | Apache Tomcat/Coyote JSP engine 1.1. |
 
 ---
 
-## 🚨 Kesimpulan Kerentanan
+## ⚠️ Analisis Kerentanan
 
-Host **192.168.100.10** adalah target dengan tingkat kerentanan **Sangat Tinggi (Critical)**. Kerentanan utama meliputi:
+Target **192.168.100.10** adalah mesin yang sengaja dibuat sangat rentan. Celah keamanan yang ditemukan meliputi:
 
-1.  **Akses Root Shell Langsung (Port 1524):** Ini adalah celah paling berbahaya karena memberikan kontrol penuh (hak akses *root*) ke penyerang.
-2.  **Anonymous FTP (Port 21):** Mengizinkan transfer file tanpa kredensial, ditambah kerentanan spesifik pada versi **vsftpd 2.3.4**.
-3.  **Layanan Versi Lama:** Sebagian besar layanan (SSH, Apache, MySQL, PostgreSQL) menggunakan versi yang sudah sangat tua dan terpublikasi memiliki berbagai celah keamanan.
+1.  **Akses Root Shell (1524/tcp):** Port ini menyediakan jalur langsung ke sistem dengan hak akses *root*, menjadikannya celah eksploitasi tertinggi.
+2.  **Layanan Usang:** Banyak layanan (FTP, SSH, Samba, MySQL, PostgreSQL) menggunakan versi yang sangat tua yang telah diketahui memiliki berbagai celah keamanan yang dipublikasikan (contohnya *vsftpd 2.3.4 backdoor*).
+3.  **Akses Anonim:** FTP pada Port 21 mengizinkan login anonim, memberikan akses ke sistem file FTP.
