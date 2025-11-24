@@ -4,9 +4,9 @@
 IP Address : **192.168.100.12 target**
 Hostname : **target**
 Command : `nmap -n -Pn -p- -A 192.168.100.12 (target) -o hasil_scan.txt` (Contoh Komprehensif)
-![alt text](images/gambar1.png)
-![alt text](images/gambar2.png)
-![alt text](images/gambar3.png)
+![gambar1.png](images/gambar1.png)
+![gambar2.png](images/gambar2.png)
+![gambar3.png](images/gambar3.png)
 
 
 
