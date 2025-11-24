@@ -1,6 +1,6 @@
 # 🛡️ Laporan Hasil Scan Nmap - Metasploitable 2
 
-Laporan ini menyajikan hasil pemindaian jaringan pada target **192.168.100.10** menggunakan tool **Nmap**, berdasarkan output terminal yang dianalisis. Target teridentifikasi sebagai mesin pengujian kerentanan (vulnerable machine), kemungkinan besar adalah **Metasploitable 2**.
+Laporan ini menyajikan hasil pemindaian jaringan pada target **192.168.100.10** menggunakan tool **Nmap**. Target teridentifikasi sebagai vulnerable machine **Metasploitable 2**.
 
 ---
 
@@ -9,60 +9,50 @@ Laporan ini menyajikan hasil pemindaian jaringan pada target **192.168.100.10** 
 | Parameter | Nilai |
 |----------|-------|
 | **Host Name/Target IP** | `192.168.100.10` |
-| **Perintah Nmap** | `nmap -A 192.168.100.10` (atau `-n -Pn -sV -T4 -O --script vuln`) |
-| **Status Host** | Up (Hidup) |
-| **Waktu Scan** | Sekitar 211.55 detik |
+| **Perintah Nmap** | `nmap -A 192.168.100.10` |
+| **Status Host** | Up |
+| **Waktu Scan** | 211.55 detik |
 | **OS Ditemukan** | Linux Kernel 2.6.9 - 2.6.33 |
 
 ---
 
 ## 💻 Port dan Layanan Terbuka
 
-Berikut daftar port yang terdeteksi dalam keadaan **open** beserta layanan dan versinya:
-
-| Port | Proto | Status | Layanan | Versi | Informasi Tambahan |
-|------|--------|--------|---------|--------|----------------------|
-| 21   | tcp | open | ftp | vsftpd 2.3.4 | Anonymous FTP login allowed (230). |
-| 22   | tcp | open | ssh | OpenSSH 4.3p2 Debian r10 | RSA & DSA keys tersedia. |
-| 23   | tcp | open | telnet | Linux telnetd | — |
-| 25   | tcp | open | smtp | Postfix smtpd | — |
-| 53   | tcp | open | domain | ISC BIND 9.4.2 | — |
-| 80   | tcp | open | http | Apache 2.2.8 (Ubuntu) | Title: "Metasploitable2". |
-| 111  | tcp | open | rpcbind | 2 (RPC #100000) | — |
-| 139  | tcp | open | netbios-ssn | — | NETBIOS: Nama Host = METASPLOITABLE |
-| 445  | tcp | open | netbios-ssn | Samba smbd 3.x-4.x | Workgroup: WORKGROUP |
-| 512  | tcp | open | exec | netkit rsh execd | — |
-| 513  | tcp | open | login | GNU/Linux Rlogin | — |
-| 514  | tcp | open | shell | Netkit rshd | — |
-| 1099 | tcp | open | java-rmi | GNU Classpath | RMI registry terbuka |
+| Port | Protocol | Status | Layanan | Versi | Informasi Tambahan |
+|------|----------|--------|---------|--------|----------------------|
+| 21   | tcp | open | ftp | vsftpd 2.3.4 | Anonymous FTP login allowed (230) |
+| 22   | tcp | open | ssh | OpenSSH 4.3p2 Debian r10 | RSA & DSA keys tersedia |
+| 23   | tcp | open | telnet | Linux telnetd | - |
+| 25   | tcp | open | smtp | Postfix smtpd | - |
+| 53   | tcp | open | domain | ISC BIND 9.4.2 | - |
+| 80   | tcp | open | http | Apache 2.2.8 (Ubuntu) | Judul halaman "Metasploitable2" |
+| 111  | tcp | open | rpcbind | 2 (RPC #100000) | - |
+| 139  | tcp | open | netbios-ssn | - | NetBIOS: Nama = METASPLOITABLE |
+| 445  | tcp | open | netbios-ssn | Samba 3.x–4.x | Workgroup = WORKGROUP |
+| 512  | tcp | open | exec | netkit rsh execd | - |
+| 513  | tcp | open | login | GNU/Linux Rlogin | - |
+| 514  | tcp | open | shell | Netkit rshd | - |
+| 1099 | tcp | open | java-rmi | GNU Classpath RMI Registry | - |
 | 1524 | tcp | open | bindshell | Metasploitable shell | **Backdoor shell root** |
-| 2049 | tcp | open | nfs | 2-4 (RPC #100003) | — |
-| 2121 | tcp | open | ftp | ProFTPD 1.3.1 | — |
-| 3306 | tcp | open | mysql | MySQL 5.0.51a | — |
-| 3632 | tcp | open | distccd | distccd v1 | Rentan dieksekusi remote |
-| 5432 | tcp | open | postgresql | PostgreSQL 8.3.x | — |
-| 5900 | tcp | open | vnc | Protocol 3.3 | VNC auth failed |
-| 6000 | tcp | open | X11 | — | Access denied |
-| 6667 | tcp | open | irc | UnrealIRCd | Versi ini backdoored |
-| 8009 | tcp | open | ajp13 | Apache JServ Protocol 1.3 | — |
-| 8180 | tcp | open | http | Apache Tomcat/Coyote JSP 1.1 | — |
+| 2049 | tcp | open | nfs | NFS 2-4 | - |
+| 2121 | tcp | open | ftp | ProFTPD 1.3.1 | - |
+| 3306 | tcp | open | mysql | MySQL 5.0.51a | - |
+| 3632 | tcp | open | distccd | distccd v1 | Rentan remote execute |
+| 5432 | tcp | open | postgresql | PostgreSQL 8.3.x | - |
+| 5900 | tcp | open | vnc | Protocol 3.3 | VNC authentication failed |
+| 6000 | tcp | open | X11 | - | Access denied |
+| 6667 | tcp | open | irc | UnrealIRCd | Versi longgar/backdoored |
+| 8009 | tcp | open | ajp13 | Apache JServ Protocol 1.3 | - |
+| 8180 | tcp | open | http | Apache Tomcat/Coyote JSP 1.1 | - |
 
 ---
 
 ## 🚨 Kesimpulan Kerentanan
 
-Host **192.168.100.10** memiliki tingkat kerentanan **Sangat Tinggi (Critical)**. Temuan penting:
+Host memiliki tingkat kerentanan **Sangat Tinggi (Critical)**:
 
-### 🔥 1. Akses Root Shell Terbuka (Port 1524)
-Backdoor shell memberikan akses **root** tanpa autentikasi. Ini celah paling kritis.
+1. **Backdoor root shell (Port 1524)** – akses penuh tanpa autentikasi.  
+2. **Anonymous FTP (Port 21)** – risiko kebocoran file + exploit vsftpd 2.3.4.  
+3. **Layanan versi lama** – Apache, OpenSSH, Samba, MySQL, PostgreSQL, Tomcat, distccd, dll.  
 
-### 🔓 2. Anonymous FTP (Port 21)
-Mengizinkan user login tanpa password. Versi **vsftpd 2.3.4** juga dikenal memiliki exploit backdoor.
-
-### 🧨 3. Layanan Versi Lama dan Rentan
-Banyak layanan seperti **SSH, Samba, Apache, MySQL, PostgreSQL, distccd, Tomcat** menjalankan versi usang yang mempunyai banyak kelemahan keamanan.
-
----
-
-> **Catatan:** Host ini tampaknya memang sebuah mesin tujuan latihan penetration testing (Metasploitable 2).
-
+Host ini hampir pasti adalah **Metasploitable 2**.
